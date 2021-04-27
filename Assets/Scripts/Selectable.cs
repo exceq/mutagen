@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Selectable : MonoBehaviour
 {
@@ -13,7 +14,12 @@ public class Selectable : MonoBehaviour
 
     public void Select(Color color)
     {
-        GetComponent<Renderer>().materials[0].color = color;
+        GetComponent<Renderer>().materials[0].color = color; 
+    }
+
+    public void Use(Action useAction)
+    {
+        useAction();
     }
 
     public void Deselect()

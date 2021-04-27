@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class UseMutagenController : MonoBehaviour
 {
@@ -8,10 +9,20 @@ public class UseMutagenController : MonoBehaviour
     public Transform pointer;
     public Material material;
 
+    List<Action> buffs;
+
     Selectable current;
+    System.Random rnd = new System.Random();
     void Start()
     {
-        
+        buffs = new List<Action> {
+            () => gameObject.GetComponentInParent<CharacterMovement>().speed += 500,
+            () => gameObject.GetComponentInParent<CharacterMovement>().speed = 50,
+            () => gameObject.GetComponentInParent<CharacterMovement>().jumpForce += 500,
+            () => gameObject.GetComponentInParent<CharacterMovement>().speed = 50,
+            () => gameObject.GetComponentInParent<Transform>().localScale = new Vector3(0.5f,0.5f,0.5f),
+            () => gameObject.GetComponentInParent<Transform>().localScale = new Vector3(5, 5, 5)
+        };
     }
 
     // Update is called once per frame
@@ -24,7 +35,10 @@ public class UseMutagenController : MonoBehaviour
         {
             current = hit.collider.GetComponent<Selectable>();
             current.Select(material.color);
-            print("bulbbb!!!!!!");
+            if (Input.GetKeyDown(KeyCode.E)) {
+                current.Use(buffs[rnd.Next(4, buffs.Count-1)]);
+                Destroy(current.gameObject);
+            }
         }
         else
         {
