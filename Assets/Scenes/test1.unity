@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 987842908}
-  m_IndirectSpecularColor: {r: 0.4366756, g: 0.48427194, b: 0.5645252, a: 1}
+  m_IndirectSpecularColor: {r: 0.43667555, g: 0.48427182, b: 0.5645241, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &4
 LightmapSettings:
@@ -3603,7 +3603,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: aaa693899f3d0a94ea893cbaf1e47f9c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 22.84125
+      value: 22.84
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: aaa693899f3d0a94ea893cbaf1e47f9c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3644,6 +3644,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: aaa693899f3d0a94ea893cbaf1e47f9c, type: 3}
       propertyPath: m_Name
       value: Blub1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: aaa693899f3d0a94ea893cbaf1e47f9c, type: 3}
+      propertyPath: m_TagString
+      value: Mutagen
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aaa693899f3d0a94ea893cbaf1e47f9c, type: 3}
@@ -5062,6 +5066,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: aaa693899f3d0a94ea893cbaf1e47f9c, type: 3}
       propertyPath: m_Name
       value: Blub1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: aaa693899f3d0a94ea893cbaf1e47f9c, type: 3}
+      propertyPath: m_TagString
+      value: Mutagen
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aaa693899f3d0a94ea893cbaf1e47f9c, type: 3}
@@ -10767,6 +10775,7 @@ GameObject:
   - component: {fileID: 632156293}
   - component: {fileID: 632156292}
   - component: {fileID: 632156291}
+  - component: {fileID: 632156294}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -10856,6 +10865,19 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &632156294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 632156289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49e5aa05f47b14c489022086beb61ea3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: 0c636f58a14f59a49a46fddfcf3a1d63, type: 2}
 --- !u!1001 &634958995
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19902,6 +19924,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blub2
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 97d6bc1d2576b0343925b9c5f6b38338, type: 3}
+      propertyPath: m_TagString
+      value: Mutagen
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97d6bc1d2576b0343925b9c5f6b38338, type: 3}
 --- !u!1 &1160342319
@@ -20734,6 +20760,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 43a2b64165870904096fb171ed79604f, type: 3}
       propertyPath: m_Name
       value: Blub3
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 43a2b64165870904096fb171ed79604f, type: 3}
+      propertyPath: m_TagString
+      value: Mutagen
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 43a2b64165870904096fb171ed79604f, type: 3}
