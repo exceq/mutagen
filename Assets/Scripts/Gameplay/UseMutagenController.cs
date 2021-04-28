@@ -11,7 +11,7 @@ public class UseMutagenController : MonoBehaviour
 
     List<Action> buffs;
 
-    Selectable current;
+    Outline current;
     System.Random rnd = new System.Random();
     List<Effect> currentEffects = new List<Effect>();
     List<Effect> effectsList = new List<Effect>();
@@ -20,7 +20,7 @@ public class UseMutagenController : MonoBehaviour
     {
         var ctrl = GetComponent<PlayerCharacterController>();
         buffs = new List<Action> {
-            () => ctrl.MaxSpeedOnGround = 30,
+            () => ctrl.MaxSpeedOnGround = 300,
             () => ctrl.MaxSpeedOnGround = 5,
             () => ctrl.JumpForce = 15,
             () => ctrl.JumpForce = 2,
@@ -39,38 +39,34 @@ public class UseMutagenController : MonoBehaviour
         RaycastHit hit;
         var cam = GetComponentInChildren<Camera>().transform;
         Ray ray = new Ray(cam.position, cam.forward);
-        int a = (1 << 2) ^ 31;
-        if (Physics.Raycast(ray, out hit, 100, a) && hit.collider.GetComponent<Selectable>())
+        int mask = 1 << 6;
+        if (Physics.Raycast(ray, out hit, 100, mask))
         {
-            current = hit.collider.GetComponent<Selectable>();
-            current.Select(material.color);
+            //current = hit.collider.GetComponent<Selectable>();
+            //current.Select();
+            current = hit.collider.gameObject.GetComponent<Outline>();
+            current.enabled = true;
             if (Input.GetKeyDown(KeyCode.E)) {
-                UseBottle(effectsList[4], current);
-                Destroy(current.gameObject);
+                UseBottle(effectsList[0], current);
             }
         }
         else
         {
             if (current != null)
-                current.Deselect();
+                current.enabled = false;
         }
         pointer.position = hit.point;
         RefreshEffects();
         
     }
 
-    void UseBottle(Effect effect, Selectable selectedItem)
+    void UseBottle(Effect effect, Outline selectedItem)
     {
         effect.StartTime = Time.time;
-        //effect.Action();
-        Invoke("Act",0);
+        effect.Action();
         currentEffects.Add(effect);
+        Destroy(selectedItem.gameObject);
     }
-    void Act()
-    {
-        effectsList[4].Action();
-    }
-
 
     void RefreshEffects()
     {
@@ -79,7 +75,6 @@ public class UseMutagenController : MonoBehaviour
             var e = currentEffects[i];
             if (Time.time >= e.StartTime + e.Duration)
             {
-                CancelInvoke("Act");
                 currentEffects.Remove(e);
             }
         }
