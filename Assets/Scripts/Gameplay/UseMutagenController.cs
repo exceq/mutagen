@@ -45,7 +45,7 @@ public class UseMutagenController : MonoBehaviour
             current = hit.collider.GetComponent<Selectable>();
             current.Select(material.color);
             if (Input.GetKeyDown(KeyCode.E)) {
-                UseBottle(effectsList[5], current);
+                UseBottle(effectsList[4], current);
                 Destroy(current.gameObject);
             }
         }
@@ -68,7 +68,7 @@ public class UseMutagenController : MonoBehaviour
     }
     void Act()
     {
-        effectsList[5].Action();
+        effectsList[4].Action();
     }
 
 
