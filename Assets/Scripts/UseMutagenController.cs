@@ -20,8 +20,8 @@ public class UseMutagenController : MonoBehaviour
             () => gameObject.GetComponentInParent<CharacterMovement>().speed = 50,
             () => gameObject.GetComponentInParent<CharacterMovement>().jumpForce += 500,
             () => gameObject.GetComponentInParent<CharacterMovement>().speed = 50,
-            () => gameObject.GetComponentInParent<Transform>().localScale = new Vector3(0.5f,0.5f,0.5f),
-            () => gameObject.GetComponentInParent<Transform>().localScale = new Vector3(5, 5, 5)
+            () => gameObject.GetComponentInParent<Transform>().localScale.Set(1,0.3f,1),
+            () => gameObject.GetComponentInParent<Transform>().localScale.Set(5, 5, 5)
         };
     }
 
@@ -36,7 +36,8 @@ public class UseMutagenController : MonoBehaviour
             current = hit.collider.GetComponent<Selectable>();
             current.Select(material.color);
             if (Input.GetKeyDown(KeyCode.E)) {
-                current.Use(buffs[rnd.Next(4, buffs.Count-1)]);
+                current.Use(buffs[4]);
+                //current.Use(buffs[rnd.Next(3, buffs.Count-1)]);
                 Destroy(current.gameObject);
             }
         }

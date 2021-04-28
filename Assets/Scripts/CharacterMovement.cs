@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
 {
-	public CameraController cam;
+	public Camera PlayerCamera;
 
 	public float speed;
 	protected Rigidbody r;
@@ -12,11 +12,22 @@ public class CharacterMovement : MonoBehaviour
 	private Vector3 horizontal;
 
 	public float jumpForce;
-	private bool isJumping;
 
+	public float rotationSensitivity = 3f;
+	public float yMinLimit = -89f;
+	public float yMaxLimit = 89f;
+
+	CharacterController m_Controller;
+	private bool isJumping;
+	private float x, y;
 	void Start()
 	{
+		m_Controller = GetComponent<CharacterController>();
+		Vector3 angles = transform.eulerAngles;
+		x = angles.y;
+		y = angles.x;
 		r = GetComponent<Rigidbody>();
+		m_Controller.enableOverlapRecovery = true;
 	}
 
     private void Update()
@@ -44,16 +55,40 @@ public class CharacterMovement : MonoBehaviour
 			isJumping = false;
 		}
 
+
+		//HandleCameraRotation();
+
+		//RotateCharacter();
+
 	}
 
     private void LateUpdate()
     {
-		cam.LateUpdate();
+		HandleCameraRotation();
 		RotateCharacter();
-	}
+    }
 
     private void RotateCharacter()
 	{
-		transform.rotation = Quaternion.LookRotation(new Vector3(cam.transform.forward.x, 0f, cam.transform.forward.z));
+		transform.rotation = Quaternion.LookRotation(new Vector3(PlayerCamera.transform.forward.x, 0f, PlayerCamera.transform.forward.z));
+	}
+
+    void HandleCameraRotation()
+	{
+		Cursor.lockState = CursorLockMode.Locked;
+
+		x += Input.GetAxis("Mouse X") * rotationSensitivity;
+		y = ClampAngle(y - Input.GetAxis("Mouse Y") * rotationSensitivity, yMinLimit, yMaxLimit);
+
+		// Rotation
+		PlayerCamera.transform.rotation = Quaternion.AngleAxis(x, Vector3.up) * Quaternion.AngleAxis(y, Vector3.right);
+	}
+
+	// Clamping Euler angles
+	private float ClampAngle(float angle, float min, float max)
+	{
+		if (angle < -360) angle += 360;
+		if (angle > 360) angle -= 360;
+		return Mathf.Clamp(angle, min, max);
 	}
 }
