@@ -13,6 +13,9 @@ public class UseMutagenController : MonoBehaviour
 
     Selectable current;
     System.Random rnd = new System.Random();
+    List<Effect> currentEffects = new List<Effect>();
+    List<Effect> effectsList = new List<Effect>();
+
     void Start()
     {
         var ctrl = GetComponent<PlayerCharacterController>();
@@ -24,6 +27,10 @@ public class UseMutagenController : MonoBehaviour
             () => GetComponent<Transform>().localScale = new Vector3(1,0.3f,1),
             () => GetComponent<Transform>().localScale = new Vector3(5, 5, 5)
         };
+        foreach (var e in buffs)
+        {
+            effectsList.Add(new Effect(5, e));
+        }
     }
 
     // Update is called once per frame
@@ -38,9 +45,8 @@ public class UseMutagenController : MonoBehaviour
             current = hit.collider.GetComponent<Selectable>();
             current.Select(material.color);
             if (Input.GetKeyDown(KeyCode.E)) {
-                current.Use(buffs[5]);
-                //current.Use(buffs[rnd.Next(3, buffs.Count-1)]);
-                //Destroy(current.gameObject);
+                UseBottle(effectsList[5], current);
+                Destroy(current.gameObject);
             }
         }
         else
@@ -49,5 +55,33 @@ public class UseMutagenController : MonoBehaviour
                 current.Deselect();
         }
         pointer.position = hit.point;
+        RefreshEffects();
+        
+    }
+
+    void UseBottle(Effect effect, Selectable selectedItem)
+    {
+        effect.StartTime = Time.time;
+        //effect.Action();
+        Invoke("Act",0);
+        currentEffects.Add(effect);
+    }
+    void Act()
+    {
+        effectsList[5].Action();
+    }
+
+
+    void RefreshEffects()
+    {
+        for (int i = 0; i< currentEffects.Count; i++)
+        {
+            var e = currentEffects[i];
+            if (Time.time >= e.StartTime + e.Duration)
+            {
+                CancelInvoke("Act");
+                currentEffects.Remove(e);
+            }
+        }
     }
 }

@@ -19118,7 +19118,6 @@ GameObject:
   - component: {fileID: 1069167493}
   - component: {fileID: 1069167492}
   - component: {fileID: 1069167491}
-  - component: {fileID: 1069167490}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -19126,23 +19125,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1069167490
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1069167489}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bf9d18c87a131f44b7d74c03c836bed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationSensitivity: 3
-  yMinLimit: -89
-  yMaxLimit: 89
-  x: 0
-  y: 0
 --- !u!124 &1069167491
 Behaviour:
   m_ObjectHideFlags: 0
@@ -21024,15 +21006,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 43a2b64165870904096fb171ed79604f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -9.017
+      value: -6.42
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 43a2b64165870904096fb171ed79604f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 22.84125
+      value: 23.84
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 43a2b64165870904096fb171ed79604f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 159.4988
+      value: 128.46
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 43a2b64165870904096fb171ed79604f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -26800,7 +26782,6 @@ GameObject:
   - component: {fileID: 1532026166}
   - component: {fileID: 1532026165}
   - component: {fileID: 1532026164}
-  - component: {fileID: 1532026163}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -26808,23 +26789,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1532026163
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1532026162}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bf9d18c87a131f44b7d74c03c836bed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationSensitivity: 3
-  yMinLimit: -89
-  yMaxLimit: 89
-  x: 0
-  y: 0
 --- !u!124 &1532026164
 Behaviour:
   m_ObjectHideFlags: 0

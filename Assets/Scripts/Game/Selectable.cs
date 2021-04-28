@@ -17,11 +17,6 @@ public class Selectable : MonoBehaviour
         GetComponent<Renderer>().materials[0].color = color; 
     }
 
-    public void Use(Action useAction)
-    {
-        useAction();
-    }
-
     public void Deselect()
     {
         GetComponent<Renderer>().materials[0].color = startColor;
