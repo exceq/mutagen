@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 987842908}
-  m_IndirectSpecularColor: {r: 0.43667555, g: 0.48427182, b: 0.5645241, a: 1}
+  m_IndirectSpecularColor: {r: 0.43667546, g: 0.48427135, b: 0.5645225, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &4
 LightmapSettings:
@@ -5027,9 +5027,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffcb4bdfc3f3be349a0518685d3bb440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 632156291}
+  PlayerCamera: {fileID: 0}
   speed: 300
   jumpForce: 300
+  rotationSensitivity: 3
+  yMinLimit: -89
+  yMaxLimit: 89
 --- !u!136 &296435786
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -12715,9 +12718,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffcb4bdfc3f3be349a0518685d3bb440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 1532026163}
+  PlayerCamera: {fileID: 0}
   speed: 300
   jumpForce: 300
+  rotationSensitivity: 3
+  yMinLimit: -89
+  yMaxLimit: 89
 --- !u!136 &761891723
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -33085,9 +33091,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffcb4bdfc3f3be349a0518685d3bb440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 1069167490}
+  PlayerCamera: {fileID: 0}
   speed: 300
   jumpForce: 200
+  rotationSensitivity: 3
+  yMinLimit: -89
+  yMaxLimit: 89
 --- !u!136 &1952896672
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -34535,6 +34544,36 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 71a746477668a2245bf927dff531bac0, type: 3}
+--- !u!1 &2044620631 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 2d927c309169ccd49932e4a2013e6557, type: 3}
+  m_PrefabInstance: {fileID: 204119083}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2044620634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2044620631}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d928cf65c8366549b108b09ce215283, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &2044620635
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2044620631}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 0.79992354, y: 0.5974234, z: 0.29999998}
+  m_Center: {x: 0, y: 0.2937117, z: 0}
 --- !u!1 &2045132683 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6cea28ac0e4d12b43b372a6f5b867b16, type: 3}
