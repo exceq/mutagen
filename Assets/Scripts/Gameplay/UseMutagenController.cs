@@ -16,6 +16,9 @@ public class UseMutagenController : MonoBehaviour
 
     void Start()
     {
+        //Time.timeScale = 2f;
+        //Time.fixedDeltaTime = Time.timeScale;
+
         var ctrl = GetComponent<PlayerCharacterController>();
         float startSpeed = ctrl.MaxSpeedOnGround;
         float startJF = ctrl.JumpForce;
@@ -28,6 +31,7 @@ public class UseMutagenController : MonoBehaviour
                                 () => {ctrl.Scale = 1;GetComponent<Transform>().localScale = Vector3.one * 1; }),
             new Effect(10, () => { ctrl.Scale = 0.8f; GetComponent<Transform>().localScale = Vector3.one * 0.3f; },
                                 () => {ctrl.Scale = 1;GetComponent<Transform>().localScale = Vector3.one * 1; }),
+            new Effect(10, () => GetComponent<Transform>().localScale = new Vector3(1,1,0), () => GetComponent<Transform>().localScale = Vector3.one )
         };
     }
 
@@ -47,7 +51,7 @@ public class UseMutagenController : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    UseBottle(buffs[rnd.Next(6)], current);
+                    UseBottle(buffs[6], current);
                 }
             }
             else if (current != null && hit.collider.gameObject != current.gameObject)
@@ -89,5 +93,4 @@ public class UseMutagenController : MonoBehaviour
         effect.PostAction();
         RefreshEffects();
     }
-
 }
