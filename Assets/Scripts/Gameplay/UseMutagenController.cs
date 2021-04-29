@@ -9,28 +9,26 @@ public class UseMutagenController : MonoBehaviour
     public Transform pointer;
     public Material material;
 
-    List<Action> buffs;
-
     Outline current;
+    List<Effect> buffs;
     System.Random rnd = new System.Random();
     List<Effect> currentEffects = new List<Effect>();
-    List<Effect> effectsList = new List<Effect>();
 
     void Start()
     {
         var ctrl = GetComponent<PlayerCharacterController>();
-        buffs = new List<Action> {
-            () => ctrl.MaxSpeedOnGround = 300,
-            () => ctrl.MaxSpeedOnGround = 5,
-            () => ctrl.JumpForce = 15,
-            () => ctrl.JumpForce = 2,
-            () => GetComponent<Transform>().localScale = new Vector3(1,0.3f,1),
-            () => GetComponent<Transform>().localScale = new Vector3(5, 5, 5)
+        float startSpeed = ctrl.MaxSpeedOnGround;
+        float startJF = ctrl.JumpForce;
+        buffs = new List<Effect> {
+            new Effect(10, () => ctrl.MaxSpeedOnGround = 50f, () => ctrl.MaxSpeedOnGround = startSpeed),
+            new Effect(10, () => ctrl.MaxSpeedOnGround = 4f, () => ctrl.MaxSpeedOnGround = startSpeed),
+            new Effect(10, () => ctrl.JumpForce = 12, () => ctrl.JumpForce = startJF),
+            new Effect(10, () => ctrl.JumpForce = 3, () => ctrl.JumpForce = startJF),
+            new Effect(10, () => { ctrl.Scale = 1.3f; GetComponent<Transform>().localScale = Vector3.up * 3; },
+                                () => {ctrl.Scale = 1;GetComponent<Transform>().localScale = Vector3.one * 1; }),
+            new Effect(10, () => { ctrl.Scale = 0.8f; GetComponent<Transform>().localScale = Vector3.one * 0.3f; },
+                                () => {ctrl.Scale = 1;GetComponent<Transform>().localScale = Vector3.one * 1; }),
         };
-        foreach (var e in buffs)
-        {
-            effectsList.Add(new Effect(5, e));
-        }
     }
 
     // Update is called once per frame
@@ -39,38 +37,42 @@ public class UseMutagenController : MonoBehaviour
         RaycastHit hit;
         var cam = GetComponentInChildren<Camera>().transform;
         Ray ray = new Ray(cam.position, cam.forward);
-        int mask = 1 << 6;
-        if (Physics.Raycast(ray, out hit, 100, mask))
+        int mask = ~(1 << 2);
+        if (Physics.Raycast(ray, out hit, 2f, mask))
         {
-            //current = hit.collider.GetComponent<Selectable>();
-            //current.Select();
-            current = hit.collider.gameObject.GetComponent<Outline>();
-            current.enabled = true;
-            if (Input.GetKeyDown(KeyCode.E)) {
-                UseBottle(effectsList[0], current);
+            if (hit.collider.gameObject.layer == 6 && hit.distance <= 1f)
+            {
+                current = hit.collider.gameObject.GetComponent<Outline>();
+                current.enabled = true;
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    UseBottle(buffs[rnd.Next(6)], current);
+                }
+            }
+            else if (current != null && hit.collider.gameObject != current.gameObject)
+            {
+                current.enabled = false;
             }
         }
-        else
-        {
-            if (current != null)
-                current.enabled = false;
-        }
+        //else if (current != null)
+        //{
+        //    current.enabled = false;
+        //}
         pointer.position = hit.point;
-        RefreshEffects();
-        
+        //RefreshEffects();        
     }
 
     void UseBottle(Effect effect, Outline selectedItem)
     {
-        effect.StartTime = Time.time;
-        effect.Action();
         currentEffects.Add(effect);
+        StartCoroutine(UseEffect(effect));
         Destroy(selectedItem.gameObject);
     }
 
     void RefreshEffects()
     {
-        for (int i = 0; i< currentEffects.Count; i++)
+        for (int i = 0; i < currentEffects.Count; i++)
         {
             var e = currentEffects[i];
             if (Time.time >= e.StartTime + e.Duration)
@@ -79,4 +81,13 @@ public class UseMutagenController : MonoBehaviour
             }
         }
     }
+
+    IEnumerator UseEffect(Effect effect)
+    {
+        effect.Action();
+        yield return new WaitForSeconds(effect.Duration);
+        effect.PostAction();
+        RefreshEffects();
+    }
+
 }

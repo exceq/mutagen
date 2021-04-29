@@ -48,12 +48,10 @@ public class PlayerCharacterController : MonoBehaviour
 	[Tooltip("Ratio (0-1) of the character height where the camera will be at")]
 	public float CameraHeightRatio = 0.95f;
 
-	[Tooltip("Height of character when standing")]
-	public float CapsuleHeightStanding = 1.8f;
-
 	public bool IsGrounded { get; private set; }
 	public bool HasJumpedThisFrame { get; private set; }
 	public Vector3 CharacterVelocity { get; set; }
+	public float Scale { get; set; } = 1f;
 
 
 	Actor m_Actor;
@@ -63,9 +61,11 @@ public class PlayerCharacterController : MonoBehaviour
 	Vector3 m_GroundNormal;
 	Vector3 m_LatestImpactSpeed;
 
+	float speedModifier = 1f;
 	float m_CameraVerticalAngle = 0f;
 	float m_LastTimeJumped;
 	float m_TargetCharacterHeight = 1.8f;
+	//float m_TargetCharacterScale = 1f;
 	const float k_JumpGroundingPreventionTime = 0.2f;
 	const float k_GroundCheckDistanceInAir = 0.07f;
 	void Awake()
@@ -87,9 +87,10 @@ public class PlayerCharacterController : MonoBehaviour
 	private void Update()
 	{
 		HasJumpedThisFrame = false;
-		GroundCheck();
+		//GroundCheck();
 		UpdateCharacterHeight(false);
 		HandleCharacterMovement();
+		//GetComponent<Transform>().localScale = Vector3.one * Scale;
 	}
 
 	void HandleCharacterMovement()
@@ -120,31 +121,31 @@ public class PlayerCharacterController : MonoBehaviour
 			Vector3 worldspaceMoveInput = transform.TransformVector(m_InputHandler.GetMoveInput());
 
 			// handle grounded movement
-			if (IsGrounded)//IsGrounded
+			if (m_Controller.isGrounded)
 			{
 				// calculate the desired velocity from inputs, max speed, and current slope
-				Vector3 targetVelocity = worldspaceMoveInput * 10 * 1;//MaxSpeedOnGround * speedModifier
+				Vector3 targetVelocity = worldspaceMoveInput * MaxSpeedOnGround * speedModifier * Scale;
 
 				// smoothly interpolate between our current velocity and the target velocity based on acceleration speed
 				CharacterVelocity = Vector3.Lerp(CharacterVelocity, targetVelocity,
-					15 * Time.deltaTime);//15 = MovementSharpnessOnGround
+					MovementSharpnessOnGround * Time.deltaTime);
 
 				// jumping
-				if (IsGrounded && m_InputHandler.GetJumpInputDown())
+				if (m_InputHandler.GetJumpInputDown())
 				{
 					
 					// start by canceling out the vertical component of our velocity
 					CharacterVelocity = new Vector3(CharacterVelocity.x, 0f, CharacterVelocity.z);
 
 					// then, add the jumpSpeed value upwards
-					CharacterVelocity += Vector3.up * 9;//9 = JumpForce			
+					CharacterVelocity += Vector3.up * JumpForce * Scale;
 
 					// remember last time we jumped because we need to prevent snapping to ground for a short time
 					m_LastTimeJumped = Time.time;
 					HasJumpedThisFrame = true;
 
 					// Force grounding to false
-					IsGrounded = false;
+					//IsGrounded = false;
 					m_GroundNormal = Vector3.up;					
 				}
 			}	
@@ -152,36 +153,36 @@ public class PlayerCharacterController : MonoBehaviour
 			else
 			{
 				// add air acceleration
-				CharacterVelocity += worldspaceMoveInput * 25 * Time.deltaTime;//25 = AccelerationSpeedInAir
+				CharacterVelocity += worldspaceMoveInput * AccelerationSpeedInAir * Time.deltaTime;
 
 				// limit air speed to a maximum, but only horizontally
 				float verticalVelocity = CharacterVelocity.y;
 				Vector3 horizontalVelocity = Vector3.ProjectOnPlane(CharacterVelocity, Vector3.up);
-				horizontalVelocity = Vector3.ClampMagnitude(horizontalVelocity, 10 * 1);//MaxSpeedInAir * speedModifier
+				horizontalVelocity = Vector3.ClampMagnitude(horizontalVelocity, MaxSpeedInAir * speedModifier);
 				CharacterVelocity = horizontalVelocity + (Vector3.up * verticalVelocity);
 
 				// apply the gravity to the velocity
-				CharacterVelocity += Vector3.down * 20 * Time.deltaTime;//20 = GravityDownForce
+				CharacterVelocity += Vector3.down * GravityDownForce * Time.deltaTime;
 			}
 		}
 
+        m_Controller.Move(CharacterVelocity * Time.deltaTime);
 		// apply the final calculated velocity value as a character movement
 		Vector3 capsuleBottomBeforeMove = GetCapsuleBottomHemisphere();
-		Vector3 capsuleTopBeforeMove = GetCapsuleTopHemisphere(m_Controller.height);
-		m_Controller.Move(CharacterVelocity * Time.deltaTime);
+        Vector3 capsuleTopBeforeMove = GetCapsuleTopHemisphere(m_Controller.height);
 
-		// detect obstructions to adjust velocity accordingly
-		m_LatestImpactSpeed = Vector3.zero;
-		if (Physics.CapsuleCast(capsuleBottomBeforeMove, capsuleTopBeforeMove, m_Controller.radius,
-			CharacterVelocity.normalized, out RaycastHit hit, CharacterVelocity.magnitude * Time.deltaTime, -1,
-			QueryTriggerInteraction.Ignore))
-		{
-			// We remember the last impact speed because the fall damage logic might need it
-			m_LatestImpactSpeed = CharacterVelocity;
+        // detect obstructions to adjust velocity accordingly
+        m_LatestImpactSpeed = Vector3.zero;
+        if (Physics.CapsuleCast(capsuleBottomBeforeMove, capsuleTopBeforeMove, m_Controller.radius,
+            CharacterVelocity.normalized, out RaycastHit hit, CharacterVelocity.magnitude * Time.deltaTime, -1,
+            QueryTriggerInteraction.Ignore))
+        {
+            // We remember the last impact speed because the fall damage logic might need it
+            m_LatestImpactSpeed = CharacterVelocity;
 
-			CharacterVelocity = Vector3.ProjectOnPlane(CharacterVelocity, hit.normal);
-		}
-	}
+            CharacterVelocity = Vector3.ProjectOnPlane(CharacterVelocity, hit.normal);
+        }
+    }
 
 	// Gets the center point of the bottom hemisphere of the character controller capsule    
 	Vector3 GetCapsuleBottomHemisphere()
@@ -201,9 +202,10 @@ public class PlayerCharacterController : MonoBehaviour
 		if (force)
 		{
 			m_Controller.height = m_TargetCharacterHeight;
-			m_Controller.center = Vector3.up * m_Controller.height * 0.5f;
+			//m_Controller.center = Vector3.up * m_Controller.height * 0.5f;
 			PlayerCamera.transform.localPosition = Vector3.up * m_TargetCharacterHeight * CameraHeightRatio + Vector3.forward * 0.2f;
 			m_Actor.AimPoint.transform.localPosition = m_Controller.center;
+			//GetComponent<Transform>().localScale = Vector3.up;
 		}
 		// Update smooth height
 		/*

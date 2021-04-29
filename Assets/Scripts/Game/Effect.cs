@@ -8,17 +8,12 @@ public class Effect
     public float StartTime { get; set; }
     public float Duration { get; private set; }
     public Action Action { get; private set; }
+    public Action PostAction { get; private set; }
 
-
-    public Effect(float duration, Action action)
+    public Effect(float duration, Action action, Action PostAction)
     {
         this.Duration = duration;
         this.Action = action;
-    }
-
-    public void Execute()
-    {
-        StartTime = Time.time;
-        Action();
+        this.PostAction = PostAction;
     }
 }
